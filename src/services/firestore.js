@@ -12,7 +12,8 @@ import {
     doc,
     where,
     serverTimestamp, 
-    arrayUnion
+    arrayUnion,
+    deleteDoc
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -49,6 +50,24 @@ export const getTasksByProjectAndUser = (projectId = '1', userId = 'dfgreg34qg')
     //     })
     // });
     
+    return querySnapshot;
+}
+
+export const getProjectsByUser = (userId = "dfgreg34qg") => {
+    const projectsRef = collection(db, 'projects');
+    const q = query(projectsRef,
+                    where("userid", "==", userId));
+
+    const querySnapshot = getDocs(q);
+    return querySnapshot;
+}
+
+export const deleteProjectById = (docId) => {
+    const projectsRef = collection(db, 'projects');
+    const q = query(projectsRef,
+                    where("doc.id", "==", docId));
+
+    const querySnapshot = deleteDoc(q);
     return querySnapshot;
 }
 

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import * as FirestoreService from '../services/firestore';
-import { collection, query, where, getDocs } from 'firebase/firestore';
 import moment from "moment";
 
-import {getTasksByProjectAndUser} from '../services/firestore';
+import {getTasksByProjectAndUser, getProjectsByUser} from '../services/firestore';
 
 function useTasks(selectedProject) {
 
@@ -40,23 +38,37 @@ function useTasks(selectedProject) {
           })();
  
         return () => {
-            console.log('Need to disconnect database');
+            console.log('Need to disconnect database in Tasks');
         };
     }, [selectedProject]);
 
     return { tasks, archivedTasks };
 };
 
-// async function getProjectsByUser(userId = "dfgreg34qg") {
-//     const projectsRef = collection(database, 'projects');
-//     const q = query(projectsRef, where("userid", "==", userId));
-//     const querySnapshot = await getDocs(q);
-//     querySnapshot.forEach((doc) => {
-//         // doc.data() is never undefined for query doc snapshots
-//         console.log(doc.id, " => ", doc.data());
-//     });
+const useProjects = () => {
+    const [projects, setProjects] = useState([]);
+  
+    useEffect(() => {
+        (async () => {
+            const projectList = await getProjectsByUser('dfgreg34qg');            
+            const allProjects = projectList.docs.map(project => ({                
+                ...project.data(),
+                docId: project.id,
+            }));
+            if (JSON.stringify(allProjects) !== JSON.stringify(projects)) {
+                setProjects(allProjects);
+            };
 
-//     return querySnapshot;
-// }
+        })();
+ 
+        return () => {
+            console.log(projects);
+            console.log('Need to disconnect database in projects');
+        };
+    }, [projects]);
+  
+    return { projects, setProjects };
+};
+  
 
-export {useTasks};
+export {useTasks, useProjects};
