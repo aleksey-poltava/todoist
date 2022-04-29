@@ -62,12 +62,12 @@ export const getProjectsByUser = (userId = "dfgreg34qg") => {
     return querySnapshot;
 }
 
-export const deleteProjectById = (docId) => {
+export async function deleteProjectById(docId) {
     const projectsRef = collection(db, 'projects');
     const q = query(projectsRef,
                     where("doc.id", "==", docId));
 
-    const querySnapshot = deleteDoc(q);
+    const querySnapshot = await deleteDoc(doc(db, 'projects', docId));
     return querySnapshot;
 }
 

@@ -1,15 +1,15 @@
 import { Content } from "./components/layout/Content";
 import { Header } from "./components/layout/Header";
-import { ProjectsProvider, SelectedProjectsProvider } from "./context";
+import { ProjectsProvider, SelectedProjectProvider } from "./context";
 
 export const App = () => (
-    <SelectedProjectsProvider>
+    <SelectedProjectProvider>
       <ProjectsProvider>
         <div className="App">
           <Header />
           <Content />
         </div>
       </ProjectsProvider>
-    </SelectedProjectsProvider>
+    </SelectedProjectProvider>
 );
 
